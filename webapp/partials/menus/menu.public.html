@@ -1,0 +1,42 @@
+<nav class="navbar navbar-default">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1"
+                aria-expanded="false">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="#/">Template</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul ng-if="!isAuthenticated" class="nav navbar-nav">
+                <li ng-class="{ active: isActivePage('/')}"><a href="#/">Home</a></li>
+                <li ng-class="{ active: isActivePage('/trajetos')}"><a href="#/trajetos">Trajetos</a></li>
+                <li ng-class="{ active: isActivePage('/horarios')}"><a href="#/horarios">Horários</a></li>
+                <li ng-class="{ active: isActivePage('/sobre')}"><a href="#/sobre">Sobre</a></li>
+            </ul>
+            <ul ng-if="!isAuthenticated" class="nav navbar-nav navbar-right">
+                <li ng-class="{ active: isActivePage('/admin/login')}"><a href="#/admin/login">Login</a></li>
+                <li ng-class="{ active: isActivePage('/admin/register')}"><a href="#/admin/register">Register</a></li>
+            </ul>
+
+            <ul ng-if="isAuthenticated" class="nav navbar-nav">
+                <li ng-class="{ active: isActivePage('/')}"><a href="#/">Home</a></li>
+                <li ng-class="{ active: isActivePage('/admin')}"><a href="#/admin">Admin</a></li>
+                <li ng-class="{ active: isActivePage('/admin/onibus')}"><a href="#/admin/onibus">ônibus</a></li>
+                <li ng-class="{ active: isActivePage('/admin/trajeto')}"><a href="#/admin/trajeto">Trajeto</a></li>
+                <li ng-class="{ active: isActivePage('/admin/ponto')}"><a href="#/admin/ponto">Ponto</a></li>
+            </ul>
+            <ul ng-if="isAuthenticated" class="nav navbar-nav navbar-right">
+                <li ng-class="{ active: isActivePage('/admin/logout')}"><a href="#/admin/logout">Logout</a></li>
+            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container-fluid -->
+</nav>

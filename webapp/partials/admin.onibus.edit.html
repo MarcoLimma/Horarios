@@ -1,0 +1,40 @@
+<section class="onibus">
+    <ol class="breadcrumb">
+        <li><a href="#/admin/onibus">ônibus</a></li>
+        <li class="active">Editar ônibus</li>
+    </ol>
+
+    <form name="EditOnibusForm">
+        <div class="form-group">
+            <label for="inputNumero">Numero</label>
+            <input type="number" class="form-control" id="inputNumero" placeholder="Numero" ng-model="onibus.numero">
+        </div>
+        <div class="form-group">
+            <label for="inputNome">Nome</label>
+            <input type="text" class="form-control" id="inputNome" placeholder="Nome" ng-model="onibus.nome">
+        </div>
+        <div class="form-group">
+            <label for="inputBairro">Bairro</label>
+            <input type="text" class="form-control" id="inputBairro" placeholder="Bairro" ng-model="onibus.bairro">
+        </div>
+
+        <div class="form-group">
+            <label for="inputTitle">Horários</label>
+        </div>
+        <div class="col-sm-12 well">
+            <div class="form-group">
+                <label for="inputBairro">Sentido</label>
+                <input type="text" class="form-control" id="inputBairro" placeholder="Bairro" ng-model="onibus.bairro">
+            </div>
+            <div class="form-group">
+                <label for="inputTitle">Horas de saída</label>
+                <textarea type="text" class="form-control" id="inputHorario-$index" rows="5" placeholder="Horários" ng-model="onibus.horario"></textarea>
+            </div>
+        </div>
+        
+        <div>
+            <button type="submit" class="btn btn-success" ng-click="save(onibus)">Salvar</button>
+        </div>
+    </form>
+
+</section>

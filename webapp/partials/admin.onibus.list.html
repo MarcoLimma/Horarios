@@ -1,0 +1,33 @@
+<section class="onibus" ng-init="list()">
+    <ol class="breadcrumb">
+        <li><a href="#/admin">Admin</a></li>
+        <li class="active">Ônibus</li>
+    </ol>
+
+    <a href="#/admin/onibus/create" class="btn btn-success" style="margin-bottom: 15px; font-size: 18px">Cadastrar ônibus</a>
+
+    <table class="table table-condensed table-hover">
+        <thead>
+            <tr>
+                <th>Número</th>
+                <th>Nome</th>
+                <th>Bairro</th>
+                <th>Criado em</th>
+                <th>Ação</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="onibus in frota">
+                <td>{{onibus.numero}}</td>
+                <td>{{onibus.nome}}</td>
+                <td>{{onibus.bairro}}</td>
+                <td>{{onibus.created | date:'medium'}}</td>
+                <td>
+                    <a href="#/admin/onibus/edit/{{onibus._id}}" class="btn btn-warning btn-xs"><span class="glyphicon glyphicon-edit"></span></a>
+                    <button class="btn btn-danger btn-xs" ng-click="deleteOnibus(onibus._id)"><span class="glyphicon glyphicon-trash"></span></button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+</section>
