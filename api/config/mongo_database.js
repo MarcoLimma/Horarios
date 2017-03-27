@@ -29,6 +29,7 @@ var Onibus = new Schema({
     numero: { type: Number, required: true},
     nome: { type: String, required: true },
     bairro: { type: String, required: true },
+    itinerarios: { type: Object, required: false },
     created: { type: Date, default: Date.now }
 });
 

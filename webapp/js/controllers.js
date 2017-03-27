@@ -69,12 +69,12 @@ appControllers.controller('AdminUserCtrl', ['$scope', '$location', '$window', 'U
     }
 ]);
 
-appControllers.controller('OnibusCtrl', ['$scope', '$location', '$sce', '$window', 'AuthenticationService', 'toastr', 'OnibusService',
+appControllers.controller('OnibusListCtrl', ['$scope', '$location', '$sce', '$window', 'AuthenticationService', 'toastr', 'OnibusService',
     function OnibusCtrl($scope, $location, $sce, $window, AuthenticationService, toastr, OnibusService) {
 
         $scope.frota = [];
 
-        $scope.list = function list() {
+        $scope.list = function () {
 
             OnibusService.list().then(function (result) {
 
@@ -86,25 +86,6 @@ appControllers.controller('OnibusCtrl', ['$scope', '$location', '$sce', '$window
 
                 console.log(error);
             });
-        }
-
-        $scope.create = function create(onibus) {
-            if (AuthenticationService.isAuthenticated) {
-
-                OnibusService.create(onibus.numero, onibus.nome, onibus.bairro).then(function (result) {
-
-                    console.log(result);
-                    toastr.success('Ônibus cadastrado com sucesso!', 'Cadastro');
-                    $location.path("/admin/onibus");
-
-                }, function (error) {
-                    toastr.error('Error! Status:' + error.status + ' - ' + error.statusText, 'Erro ao inserir');
-                    console.log(error);
-                });
-            }
-            else {
-                $location.path("/admin/login");
-            }
         }
 
         $scope.deleteOnibus = function deleteOnibus(id) {
@@ -125,6 +106,84 @@ appControllers.controller('OnibusCtrl', ['$scope', '$location', '$sce', '$window
                     console.log(error);
                 });
             }
+        }
+    }
+]);
+
+appControllers.controller('OnibusCreateCtrl', ['$scope', '$location', '$sce', '$window', 'AuthenticationService', 'toastr', 'OnibusService',
+    function OnibusCtrl($scope, $location, $sce, $window, AuthenticationService, toastr, OnibusService) {
+
+        $scope.frota = [];
+
+        $scope.sentido = [];
+        $scope.horarios = [];
+
+        $scope.itinerarios = [];
+
+        $scope.create = function create(onibus) {
+            if (AuthenticationService.isAuthenticated) {
+
+                onibus.itinerarios = $scope.itinerarios;
+
+                console.log(onibus);
+
+                OnibusService.create(onibus).then(function (result) {
+
+                    console.log(result);
+                    toastr.success('Ônibus cadastrado com sucesso!', 'Cadastro');
+                    $location.path("/admin/onibus");
+
+                }, function (error) {
+                    toastr.error('Error! Status:' + error.status + ' - ' + error.statusText, 'Erro ao inserir');
+                    console.log(error);
+                });
+            }
+            else {
+                $location.path("/admin/login");
+            }
+        }
+
+        $scope.adicionarItinerario = function(){
+
+            var itinerario = {}
+            
+            itinerario.sentido = $scope.sentido;
+
+            itinerario.horarios = $scope.horarios;
+
+            $scope.itinerarios.push(itinerario);
+
+            console.log($scope.itinerarios);
+
+            $scope.horarios = [];
+
+            $scope.sentido = "";
+
+            $scope.hora = undefined;
+
+            $scope.minuto = undefined;
+        }
+
+        $scope.adicionarHorario =  function(horarios, hora, minuto){
+
+            var horario = {
+                hora : hora,
+                minuto : minuto
+            }
+
+            horarios.push(horario);
+
+            console.log(horarios);
+        }
+
+        $scope.deleteHorario = function(horarios, index){
+            toastr.success('Horario deletado com sucesso!', 'Exclusão');
+            horarios.splice(index, 1);
+        }
+
+         $scope.deleteItinerario = function(index){
+            toastr.success('Itinerário deletado com sucesso!', 'Exclusão');
+             $scope.itinerarios.splice(index, 1);
         }
     }
 ]);

@@ -41,12 +41,12 @@ app.config(['$locationProvider', '$routeProvider',
             }).
             when('/admin/onibus', {
                 templateUrl: 'partials/admin.onibus.list.html',
-                controller: 'OnibusCtrl',
+                controller: 'OnibusListCtrl',
                 access: { requiredAuthentication: true }
             }).
             when('/admin/onibus/create', {
                 templateUrl: 'partials/admin.onibus.create.html',
-                controller: 'OnibusCtrl',
+                controller: 'OnibusCreateCtrl',
                 access: { requiredAuthentication: true }
             }).
             when('/admin/onibus/edit/:id', {

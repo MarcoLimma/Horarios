@@ -84,8 +84,8 @@ appServices.factory('OnibusService', function ($http) {
             return $http.get('/onibus/' + id);
         },
 
-        create: function (numero, nome, bairro) {
-            return $http.post('/onibus/create', { numero: numero, nome: nome, bairro: bairro });
+        create: function (onibus) {
+            return $http.post('/onibus/create', { onibus });
         },
 
         update: function (onibus) {

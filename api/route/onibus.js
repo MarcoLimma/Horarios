@@ -2,19 +2,21 @@ var db = require('../config/mongo_database');
 
 var publicFields = '_id numero nome bairro created';
 
-exports.create = function (req, res) {
-	var numero = req.body.numero ||  '';
-	var nome = req.body.nome ||  '';
-	var bairro = req.body.bairro ||  '';
 
-	if (numero == '' || nome == '' || bairro == '') {
+exports.create = function (req, res) {
+	var onibusReq = req.body.onibus ||  '';
+	
+	console.log(onibusReq);
+
+	if (onibusReq.numero == '' || onibusReq.nome == '' || onibusReq.bairro == '' ) {
 		return res.send(400);
 	}
 
 	var onibus = new db.onibusModel();
-	onibus.numero = numero;
-	onibus.nome = nome;
-	onibus.bairro = bairro;
+	onibus.numero = onibusReq.numero;
+	onibus.nome = onibusReq.nome;
+	onibus.bairro = onibusReq.bairro;
+	onibus.itinerarios = onibusReq.itinerarios;
 
 	onibus.save(function (err) {
 		if (err) {

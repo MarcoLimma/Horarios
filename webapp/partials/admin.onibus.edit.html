@@ -28,7 +28,27 @@
             </div>
             <div class="form-group">
                 <label for="inputTitle">Horas de saída</label>
-                <textarea type="text" class="form-control" id="inputHorario-$index" rows="5" placeholder="Horários" ng-model="onibus.horario"></textarea>
+                <br>
+                <input class="col-md-1" type="number" max="23" min="0">  
+                <input class="col-md-1" type="number" max="59" min="0"> 
+                <input type="button" value="Add" ng-click="adicionarHorario()">
+        <table class="table table-condensed table-hover">
+            <thead>
+                <tr>
+                    <th>Hora</th>
+                    <th>Ação</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="hora in horarios">
+                    <td>{{hora}}</td>
+                    <td>
+                        <a href="#/admin/onibus/edit/{{onibus._id}}" class="btn btn-warning btn-xs"><span class="glyphicon glyphicon-edit"></span></a>
+                        <button class="btn btn-danger btn-xs" ng-click="deleteOnibus(onibus._id)"><span class="glyphicon glyphicon-trash"></span></button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
             </div>
         </div>
         
