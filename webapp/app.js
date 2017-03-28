@@ -1,6 +1,6 @@
 'use strict';
 
-var app = angular.module('app', ['ngRoute', 'appControllers', 'appServices', 'appDirectives', 'toastr']);
+var app = angular.module('app', ['ngRoute', 'appControllers', 'appServices', 'appDirectives', 'toastr', 'uiGmapgoogle-maps']);
 
 app.config(['$locationProvider', '$routeProvider',
     function ($location, $routeProvider) {
@@ -10,12 +10,12 @@ app.config(['$locationProvider', '$routeProvider',
                 controller: 'HomeCtrl'
             }).
             when('/trajetos', {
-                templateUrl: 'partials/home.index.html',
-                controller: 'HomeCtrl'
+                templateUrl: 'partials/trajetos.index.html',
+                controller: 'TrajetosCtrl'
             }).
             when('/horarios', {
-                templateUrl: 'partials/home.index.html',
-                controller: 'HomeCtrl'
+                templateUrl: 'partials/horarios.index.html',
+                controller: 'HorariosCtrl'
             }).
             when('/sobre', {
                 templateUrl: 'partials/sobre.html',

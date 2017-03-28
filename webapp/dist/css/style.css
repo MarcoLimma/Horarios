@@ -46,3 +46,18 @@ html body {
   src: local('Gruppo'), url(../fonts/EoL765IZSvUoJyAsw4h7ow.woff2) format('woff2');
   unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2212, U+2215;
 }
+
+.angular-google-map-container {
+  height: 480px;
+  margin-bottom: 15px;
+}
+
+.text-input-stroke {
+      font-weight: bold;
+      color: black
+}
+
+.text-input-stroke > option{
+      font-weight: bold;
+      color: black
+}

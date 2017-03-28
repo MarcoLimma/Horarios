@@ -1,0 +1,37 @@
+<div class="panel panel-default">
+  <div class="panel-body">
+    <form class="form-horizontal" role="form">
+      <div class="form-group">
+        <label for="origin" class="col-sm-2 control-label">Onibus</label>
+        <div class="col-sm-8">
+          <select type="text" id="onibus" class="form-control text-input-stroke" ng-model="pesquisa.onibus" ng-options="o as o.nome for o in listaOnibus">
+                <option value="">---Selecione---</option> <!-- not selected / blank option -->
+          </select>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="destination" class="col-sm-2 control-label">Sentido</label>
+        <div class="col-sm-4">
+          <select type="text" id="sentido" class="form-control text-input-stroke" ng-model="pesquisa.itinerario" ng-options="i as i.sentido for i in pesquisa.onibus.itinerarios">
+                <option value="">---Selecione---</option> <!-- not selected / blank option -->
+          </select>
+        </div>
+        <label for="destination" class="col-sm-2 control-label">Horário</label>
+        <div class="col-sm-2">
+          <select type="text" id="horario" class="form-control text-input-stroke" ng-model="pesquisa.horario" ng-options="h as h for h in (pesquisa.onibus.itinerarios | filter:{sentido: pesquisa.itinerario.sentido})[0].horarios">
+                <option value="">---Selecione---</option> <!-- not selected / blank option -->
+          </select>
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="col-sm-offset-2 col-sm-8">
+          <button class="btn btn-primary" ng-click="getDirections(pesquisa.onibus, pesquisa.itinerario.arrayPos, pesquisa.horario)">Consultar</button>
+          <!--<button class="btn btn-primary" ng-click="clearMap()">Limpar</button>-->
+        </div>
+      </div>
+    </form>
+    <ui-gmap-google-map center="map.center" zoom="map.zoom" control="map.control">
+    </ui-gmap-google-map>
+    <!--<div id="directionsList" ng-show="directions.showList" class="panel panel-primary"></div>-->
+  </div>
+</div>

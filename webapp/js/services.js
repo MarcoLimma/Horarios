@@ -96,4 +96,13 @@ appServices.factory('OnibusService', function ($http) {
             return $http.delete('/onibus/' + id);
         }
     }
-})
+});
+
+appServices.factory('TrajetosService', function ($http) {
+    return {
+
+        get: function (url) {
+            return $http.get('/trajetos/externalRequest/' + url);
+        }
+    }
+});

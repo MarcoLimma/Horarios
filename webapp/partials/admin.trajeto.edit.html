@@ -1,0 +1,60 @@
+<section class="onibus">
+    <ol class="breadcrumb">
+        <li><a href="#/admin/onibus">ônibus</a></li>
+        <li class="active">Editar ônibus</li>
+    </ol>
+
+    <form name="EditOnibusForm">
+        <div class="form-group">
+            <label for="inputNumero">Numero</label>
+            <input type="number" class="form-control" id="inputNumero" placeholder="Numero" ng-model="onibus.numero">
+        </div>
+        <div class="form-group">
+            <label for="inputNome">Nome</label>
+            <input type="text" class="form-control" id="inputNome" placeholder="Nome" ng-model="onibus.nome">
+        </div>
+        <div class="form-group">
+            <label for="inputBairro">Bairro</label>
+            <input type="text" class="form-control" id="inputBairro" placeholder="Bairro" ng-model="onibus.bairro">
+        </div>
+
+        <div class="form-group">
+            <label for="inputTitle">Horários</label>
+        </div>
+        <div class="col-sm-12 well">
+            <div class="form-group">
+                <label for="inputBairro">Sentido</label>
+                <input type="text" class="form-control" id="inputBairro" placeholder="Bairro" ng-model="onibus.bairro">
+            </div>
+            <div class="form-group">
+                <label for="inputTitle">Horas de saída</label>
+                <br>
+                <input class="col-md-1" type="number" max="23" min="0">  
+                <input class="col-md-1" type="number" max="59" min="0"> 
+                <input type="button" value="Add" ng-click="adicionarHorario()">
+        <table class="table table-condensed table-hover">
+            <thead>
+                <tr>
+                    <th>Hora</th>
+                    <th>Ação</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="hora in horarios">
+                    <td>{{hora}}</td>
+                    <td>
+                        <a href="#/admin/onibus/edit/{{onibus._id}}" class="btn btn-warning btn-xs"><span class="glyphicon glyphicon-edit"></span></a>
+                        <button class="btn btn-danger btn-xs" ng-click="deleteOnibus(onibus._id)"><span class="glyphicon glyphicon-trash"></span></button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+            </div>
+        </div>
+        
+        <div>
+            <button type="submit" class="btn btn-success" ng-click="save(onibus)">Salvar</button>
+        </div>
+    </form>
+
+</section>

@@ -21,6 +21,7 @@ app.use(express.static(__dirname + "/../webapp"))
 var routes = {};
 routes.users = require('./route/users.js');
 routes.onibus = require('./route/onibus.js');
+routes.trajetos = require('./route/trajetos.js');
 
 //Endpoints 
 
@@ -54,5 +55,8 @@ app.put('/onibus/', jwt({ secret: secret.secretToken }), routes.onibus.update);
 
 //Delete a onibus
 app.delete('/onibus/:id', jwt({ secret: secret.secretToken }), routes.onibus.delete);
+
+//External Request
+app.get('/trajetos/externalRequest/:url', routes.trajetos.externalRequest);
 
 console.log('The API is starting on port ' + port);
