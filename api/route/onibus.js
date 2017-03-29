@@ -66,6 +66,7 @@ exports.update = function (req, res) {
 	updateOnibus.numero = onibus.numero;
 	updateOnibus.nome = onibus.nome;
 	updateOnibus.bairro = onibus.bairro;
+	updateOnibus.itinerarios = onibus.itinerarios;
 
 	db.onibusModel.update({ _id: onibus._id }, updateOnibus, function (err, nbRows, raw) {
 		return res.send(200);

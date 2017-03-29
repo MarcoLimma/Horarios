@@ -1,9 +1,6 @@
-var appControllers = angular.module('appControllers', []);
-
-appControllers.controller('TrajetosCtrl', ['$scope', '$sce', '$window', 'AuthenticationService', "$http", "TrajetosService", "OnibusService",
+angular.module('app').controller('TrajetosCtrl', ['$scope', '$sce', '$window', 'AuthenticationService', "$http", "TrajetosService", "OnibusService",
     function TrajetosCtrl($scope, $sce, $window, AuthenticationService, $http, TrajetosService, OnibusService) {
 
-        // map object
         $scope.map = {
             control: {},
             center: {
@@ -227,19 +224,9 @@ appControllers.controller('TrajetosCtrl', ['$scope', '$sce', '$window', 'Authent
 
         OnibusService.list().then(function (result) {
             console.log(result.data);
-
-            result.data.forEach(function (object) {
-                var novoOnibus = {};
-
-                novoOnibus.nome = object.numero + " - " + object.nome;
-                novoOnibus.itinerarios = onibus.itinerarios;
-
-                $scope.listaOnibus.push(novoOnibus);
-
-            })
+            $scope.listaOnibus = result.data;
 
         }, function (error) {
-
             console.log(error);
         });
 
@@ -269,28 +256,18 @@ appControllers.controller('TrajetosCtrl', ['$scope', '$sce', '$window', 'Authent
         }
 
         // get directions using google maps api
-        $scope.getDirections = function (onibus, sentido, hora) {
+        $scope.getDirections = function (onibus, itinerario, hora) {
 
             // onibus = JSON.parse(onibus);
             $scope.clearMap();
 
-
-            var wps = [];
-
-            for (var i = 0; i < onibus.itinerarios[sentido].waypoints.length; i++) {
-                wps.push(onibus.itinerarios[sentido].waypoints[i].location);
-            }
-
-
             var request = {
-                origin: new google.maps.LatLng(onibus.itinerarios[sentido].origem.latitude, onibus.itinerarios[sentido].origem.longitude),
-                destination: new google.maps.LatLng(onibus.itinerarios[sentido].destino.latitude, onibus.itinerarios[sentido].destino.longitude),
+                origin: new google.maps.LatLng($scope.pesquisa.itinerario.origem.lat, $scope.pesquisa.itinerario.origem.lng),
+                destination: new google.maps.LatLng($scope.pesquisa.itinerario.destino.lat, $scope.pesquisa.itinerario.destino.lng),
                 travelMode: google.maps.DirectionsTravelMode.DRIVING,
-                waypoints: onibus.itinerarios[sentido].waypoints
+                waypoints: $scope.pesquisa.itinerario.waypoints
 
             };
-
-            console.log(wps);
 
             directionsService.route(request, function (response, status) {
                 if (status === google.maps.DirectionsStatus.OK) {
@@ -302,50 +279,56 @@ appControllers.controller('TrajetosCtrl', ['$scope', '$sce', '$window', 'Authent
                     console.log("teste");
                     console.log(response);
 
-                    var totalValues = $scope.calcTotalValues(response);
-                    totalValues.nPontos = onibus.itinerarios[sentido].pontos.length;
+                    var totalValues = {
+                        distance: 0,
+                        duration: 0
+                    }
 
-                    $scope.calcTotalDuration(totalValues, function (realTotalDuration) {
-                        hora = hora + ":00";
-                        console.log(hora);
-                        var time = hora.split(':');
 
-                        var d = new Date(); // creates a Date Object using the clients current time
+                    // var totalValues = $scope.calcTotalValues(response);
+                    // totalValues.nPontos = onibus.itinerarios[sentido].pontos.length;
 
-                        d.setHours(+time[0]); // set Time accordingly, using implicit type coercion
-                        d.setMinutes(time[1]); // you can pass Number or String, it doesn't matter
-                        d.setSeconds(time[2]);
+                    // $scope.calcTotalDuration(totalValues, function (realTotalDuration) {
+                    //     hora = hora + ":00";
+                    //     console.log(hora);
+                    //     var time = hora.split(':');
 
-                        totalValues.selectedHour = d;
-                        totalValues.realTotalDuration = realTotalDuration;
-                        console.log(totalValues);
-                    });
+                    //     var d = new Date(); // creates a Date Object using the clients current time
+
+                    //     d.setHours(+time[0]); // set Time accordingly, using implicit type coercion
+                    //     d.setMinutes(time[1]); // you can pass Number or String, it doesn't matter
+                    //     d.setSeconds(time[2]);
+
+                    //     totalValues.selectedHour = d;
+                    //     totalValues.realTotalDuration = realTotalDuration;
+                    //     console.log(totalValues);
+                    // });
 
                     var startPinColor = "66ff33";
                     var middlePinColor = "cc0000";
-                    var startPosition = new google.maps.LatLng(onibus.itinerarios[sentido].origem.latitude, onibus.itinerarios[sentido].origem.longitude);
+                    var startPosition = new google.maps.LatLng(itinerario.origem.lat, itinerario.origem.lng);
 
-                    var stringOrigin = onibus.itinerarios[sentido].origem.latitude + "," + onibus.itinerarios[sentido].origem.longitude;
+                    var stringOrigin = itinerario.origem.lat + "," + itinerario.origem.lng;
                     // var stringDestination = onibus.itinerarios[sentido].destino.latitude + "," + onibus.itinerarios[sentido].destino.longitude;
 
 
                     $scope.addMarker(startPosition, 0, "Início " + onibus.nome, startPinColor, startPosition, [], 0, totalValues);
 
-                    onibus.itinerarios[sentido].pontos.forEach(function (element, index) {
+                    // onibus.itinerarios[sentido].pontos.forEach(function (element, index) {
 
-                        var title = "Ponto " + index;
+                    //     var title = "Ponto " + index;
 
-                        $scope.addMarker(element.posicao, index, title, middlePinColor, startPosition, onibus.itinerarios[sentido].waypoints, element.nWaypoint, totalValues);
+                    //     $scope.addMarker(element.posicao, index, title, middlePinColor, startPosition, onibus.itinerarios[sentido].waypoints, element.nWaypoint, totalValues);
 
-                    }, this);
+                    // }, this);
 
                 } else {
                     alert('Google route unsuccesfull!');
                 }
 
-                var endPosition = new google.maps.LatLng(onibus.itinerarios[sentido].destino.latitude, onibus.itinerarios[sentido].destino.longitude);
+                var endPosition = new google.maps.LatLng(itinerario.destino.lat, itinerario.destino.lng);
 
-                $scope.addMarker(endPosition, 0, "Fim " + onibus.nome, startPinColor, startPosition, onibus.itinerarios[sentido].waypoints, onibus.itinerarios[sentido].waypoints.lenght, totalValues);
+                $scope.addMarker(endPosition, 0, "Fim " + onibus.nome, startPinColor, startPosition, itinerario.waypoints, itinerario.waypoints.lenght, totalValues);
             });
         }
 
@@ -503,82 +486,14 @@ appControllers.controller('TrajetosCtrl', ['$scope', '$sce', '$window', 'Authent
     }
 ]);
 
-appControllers.controller('AdminCtrl', ['$scope', '$sce', '$window', 'AuthenticationService', 'toastr',
-    function AdminCtrl($scope, $sce, $window, AuthenticationService, toastr) {
-
-    }
-]);
-
-appControllers.controller('AdminUserCtrl', ['$scope', '$location', '$window', 'UserService', 'AuthenticationService', 'toastr',
-    function AdminUserCtrl($scope, $location, $window, UserService, AuthenticationService, toastr) {
-
-        //Admin User Controller (signIn, logOut)
-        $scope.signIn = function signIn(username, password) {
-            if (username != null && password != null) {
-
-                UserService.signIn(username, password).then(function (result) {
-                    AuthenticationService.isAuthenticated = true;
-                    $window.sessionStorage.token = result.data.token;
-                    $window.sessionStorage.currentUserId = result.data.id;
-                    toastr.success('Welcome to administrator area.', 'Login successful');
-                    $location.path("/admin");
-                }, function (error) {
-                    toastr.error('Please, check your data and try again. Status:' + error.status + ' - ' + error.statusText, 'Login error');
-                    console.log(error);
-                });
-            }
-        }
-
-        $scope.logOut = function logOut() {
-            if (AuthenticationService.isAuthenticated) {
-
-                UserService.logOut().then(function (result) {
-                    AuthenticationService.isAuthenticated = false;
-                    delete $window.sessionStorage.token;
-                    delete $window.sessionStorage.currentUserId;
-                    toastr.success('Hasta la vista baby!', 'Logout successful');
-                    $location.path("/");
-                }, function (error) {
-                    toastr.error('Error! Status:' + error.status + ' - ' + error.statusText, 'Register error');
-                    console.log(error);
-                });
-            } else {
-                $location.path("/admin/login");
-            }
-        }
-
-        $scope.register = function register(username, password, passwordConfirm) {
-            if (AuthenticationService.isAuthenticated) {
-                toastr.warning('You already have a login.', 'Register alert');
-                $location.path("/admin");
-            } else {
-                UserService.register(username, password, passwordConfirm).then(function (result) {
-                    toastr.success('Congratulations ' + username + ', now you can login to access the admin area.', 'Register successful');
-                    $location.path("/admin/login");
-                }, function (error) {
-                    toastr.error('Please, check your data and try again. Status:' + error.status + ' - ' + error.statusText, 'Register error');
-                    console.log(error);
-                });
-            }
-        }
-    }
-]);
-
-appControllers.controller('OnibusListCtrl', ['$scope', '$location', '$sce', '$window', 'AuthenticationService', 'toastr', 'OnibusService',
+angular.module('app').controller('TrajetoListCtrl', ['$scope', '$location', '$sce', '$window', 'AuthenticationService', 'toastr', 'OnibusService',
     function OnibusCtrl($scope, $location, $sce, $window, AuthenticationService, toastr, OnibusService) {
 
         $scope.frota = [];
-
         $scope.list = function () {
-
             OnibusService.list().then(function (result) {
-
-                console.log(result);
-
                 $scope.frota = result.data;
-
             }, function (error) {
-
                 console.log(error);
             });
         }
@@ -586,7 +501,6 @@ appControllers.controller('OnibusListCtrl', ['$scope', '$location', '$sce', '$wi
         $scope.deleteOnibus = function deleteOnibus(id) {
             if (id != undefined) {
                 OnibusService.delete(id).then(function (result) {
-                    console.log(result);
                     toastr.success('Ônibus deletado com sucesso!', 'Exclusão');
                     var frota = $scope.frota;
                     for (var onibusKey in frota) {
@@ -595,7 +509,6 @@ appControllers.controller('OnibusListCtrl', ['$scope', '$location', '$sce', '$wi
                             break;
                         }
                     }
-
                 }, function (error) {
                     toastr.error('Erro! Status:' + error.status + ' - ' + error.statusText, 'Erro ao excluir');
                     console.log(error);
@@ -605,158 +518,7 @@ appControllers.controller('OnibusListCtrl', ['$scope', '$location', '$sce', '$wi
     }
 ]);
 
-appControllers.controller('OnibusCreateCtrl', ['$scope', '$location', '$sce', '$window', 'AuthenticationService', 'toastr', 'OnibusService',
-    function OnibusCtrl($scope, $location, $sce, $window, AuthenticationService, toastr, OnibusService) {
-
-        $scope.frota = [];
-
-        $scope.sentido = [];
-        $scope.horarios = [];
-
-        $scope.itinerarios = [];
-
-        $scope.create = function create(onibus) {
-            if (AuthenticationService.isAuthenticated) {
-
-                onibus.itinerarios = $scope.itinerarios;
-
-                console.log(onibus);
-
-                OnibusService.create(onibus).then(function (result) {
-
-                    console.log(result);
-                    toastr.success('Ônibus cadastrado com sucesso!', 'Cadastro');
-                    $location.path("/admin/onibus");
-
-                }, function (error) {
-                    toastr.error('Error! Status:' + error.status + ' - ' + error.statusText, 'Erro ao inserir');
-                    console.log(error);
-                });
-            } else {
-                $location.path("/admin/login");
-            }
-        }
-
-        $scope.adicionarItinerario = function () {
-
-            var itinerario = {}
-
-            itinerario.sentido = $scope.sentido;
-
-            itinerario.horarios = $scope.horarios;
-
-            $scope.itinerarios.push(itinerario);
-
-            console.log($scope.itinerarios);
-
-            $scope.horarios = [];
-
-            $scope.sentido = "";
-
-            $scope.hora = undefined;
-
-            $scope.minuto = undefined;
-        }
-
-        $scope.adicionarHorario = function (horarios, hora, minuto) {
-
-            var horario = {
-                hora: hora,
-                minuto: minuto
-            }
-
-            horarios.push(horario);
-
-            console.log(horarios);
-        }
-
-        $scope.deleteHorario = function (horarios, index) {
-            toastr.success('Horario deletado com sucesso!', 'Exclusão');
-            horarios.splice(index, 1);
-        }
-
-        $scope.deleteItinerario = function (index) {
-            toastr.success('Itinerário deletado com sucesso!', 'Exclusão');
-            $scope.itinerarios.splice(index, 1);
-        }
-    }
-]);
-
-appControllers.controller('OnibusEditCtrl', ['$scope', '$routeParams', '$location', '$sce', '$window', 'AuthenticationService', 'toastr', 'OnibusService',
-    function OnibusEditCtrl($scope, $routeParams, $location, $sce, $window, AuthenticationService, toastr, OnibusService) {
-
-        $scope.onibus = {};
-
-        var id = $routeParams.id;
-
-        OnibusService.read(id).then(function (result) {
-            $scope.onibus = result.data;
-        }, function (error) {
-            toastr.error('Não foi possivel carragar as informações.', 'Erro ao editar');
-            $location.path("/admin/onibus");
-        });
-
-        $scope.save = function save(onibus) {
-            if (onibus !== undefined &&
-                onibus.numero !== undefined && onibus.numero != "" &&
-                onibus.nome !== undefined && onibus.nome != "" &&
-                onibus.bairro !== undefined && onibus.bairro != "") {
-
-
-                OnibusService.update(onibus).then(function (result) {
-                    toastr.success('Ônibus editado com sucesso!', 'Editar');
-                    $location.path("/admin/onibus");
-                }, function (error) {
-                    toastr.error('Erro! Status:' + error.status + ' - ' + error.statusText, 'Erro ao editar');
-                    console.log(error);
-                });
-            }
-        }
-    }
-]);
-
-appControllers.controller('TrajetoListCtrl', ['$scope', '$location', '$sce', '$window', 'AuthenticationService', 'toastr', 'OnibusService',
-    function OnibusCtrl($scope, $location, $sce, $window, AuthenticationService, toastr, OnibusService) {
-
-        $scope.frota = [];
-
-        $scope.list = function () {
-
-            OnibusService.list().then(function (result) {
-
-                console.log(result);
-
-                $scope.frota = result.data;
-
-            }, function (error) {
-
-                console.log(error);
-            });
-        }
-
-        $scope.deleteOnibus = function deleteOnibus(id) {
-            if (id != undefined) {
-                OnibusService.delete(id).then(function (result) {
-                    console.log(result);
-                    toastr.success('Ônibus deletado com sucesso!', 'Exclusão');
-                    var frota = $scope.frota;
-                    for (var onibusKey in frota) {
-                        if (frota[onibusKey]._id == id) {
-                            $scope.frota.splice(onibusKey, 1);
-                            break;
-                        }
-                    }
-
-                }, function (error) {
-                    toastr.error('Erro! Status:' + error.status + ' - ' + error.statusText, 'Erro ao excluir');
-                    console.log(error);
-                });
-            }
-        }
-    }
-]);
-
-appControllers.controller('TrajetoCreateCtrl', ['$scope', '$location', '$sce', '$window', 'AuthenticationService', 'toastr', 'OnibusService',
+angular.module('app').controller('TrajetoCreateCtrl', ['$scope', '$location', '$sce', '$window', 'AuthenticationService', 'toastr', 'OnibusService',
     function OnibusCtrl($scope, $location, $sce, $window, AuthenticationService, toastr, OnibusService) {
 
         $scope.map = {
@@ -771,28 +533,26 @@ appControllers.controller('TrajetoCreateCtrl', ['$scope', '$location', '$sce', '
         $scope.listaOnibus = [];
 
         OnibusService.list().then(function (result) {
-            console.log(result.data);
 
             $scope.listaOnibus = result.data;
 
-            $scope.init();
+            $scope.initMap();
 
         }, function (error) {
 
             console.log(error);
         });
 
+        var origem = null;
+        var destino = null;
         var waypoints = [];
 
 
-        $scope.init = function () {
+        $scope.initMap = function () {
 
             var map = $scope.map.control.getGMap();
-            console.log(map);
 
-
-
-            //This event listener calls addMarker() when the map is clicked.
+            //Evento de click para adicionar os marcadores
             google.maps.event.addListener(map, 'click', function (event) {
                 console.log(event.latLng.lat() + ", " + event.latLng.lng() + " - " + $scope.marcador);
 
@@ -805,21 +565,18 @@ appControllers.controller('TrajetoCreateCtrl', ['$scope', '$location', '$sce', '
                 if ($scope.marcador == 3) {
                     if (waypoints.length >= 7) {
                         alert("O número máximo de waypoints é 7");
+                        toastr.warning('O número máximo de waypoints é 7.', 'Alerta');
                     } else {
                         addMarkerWaypoints(event.latLng, map);
                     }
-
-
                 }
                 if ($scope.marcador == undefined) {
                     alert("Selecione um tipo de marcador.");
+                    toastr.warning('Selecione um tipo de marcador.', 'Alerta');
                 }
 
                 waypoints.forEach(function (obj) {
-                    console.log(obj);
                     obj.addListener('rightclick', function (event) {
-                        console.log("Clicado: " + event.latLng.lat() + ", " + event.latLng.lng());
-
                         for (var waypointsKey in waypoints) {
                             if (waypoints[waypointsKey].getPosition() == event.latLng) {
                                 waypoints[waypointsKey].setMap(null);
@@ -831,30 +588,46 @@ appControllers.controller('TrajetoCreateCtrl', ['$scope', '$location', '$sce', '
                 });
 
             });
-
-
         }
 
         function addMarkerOrigem(location, map) {
-            // Add the marker at the clicked location, and add the next-available label
-            // from the array of alphabetical characters.
-            var marker = new google.maps.Marker({
-                position: location,
-                label: 'I',
-                map: map
-            });
+            if (origem != null) {
+                origem.setMap(null);
+                var marker = new google.maps.Marker({
+                    position: location,
+                    label: 'O',
+                    map: map
+                });
+                origem = marker;
+            } else {
+                var marker = new google.maps.Marker({
+                    position: location,
+                    label: 'O',
+                    map: map
+                });
+                origem = marker;
+            }
         }
 
         function addMarkerDestino(location, map) {
-            // Add the marker at the clicked location, and add the next-available label
-            // from the array of alphabetical characters.
-            var marker = new google.maps.Marker({
-                position: location,
-                label: 'F',
-                map: map
-            });
+            if (destino != null) {
+                destino.setMap(null);
+                var marker = new google.maps.Marker({
+                    position: location,
+                    label: 'D',
+                    map: map
+                });
+                destino = marker;
+            } else {
+                var marker = new google.maps.Marker({
+                    position: location,
+                    label: 'D',
+                    map: map
+                });
+                destino = marker;
+            }
         }
-        // Adds a marker to the map.
+
         function addMarkerWaypoints(location, map) {
             var startPinColor = "66ff33";
             var pinImage = new google.maps.MarkerImage("http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|" + startPinColor,
@@ -862,9 +635,6 @@ appControllers.controller('TrajetoCreateCtrl', ['$scope', '$location', '$sce', '
                 new google.maps.Point(0, 0),
                 new google.maps.Point(10, 34));
 
-
-            // Add the marker at the clicked location, and add the next-available label
-            // from the array of alphabetical characters.
             var marker = new google.maps.Marker({
                 position: location,
                 map: map,
@@ -874,6 +644,80 @@ appControllers.controller('TrajetoCreateCtrl', ['$scope', '$location', '$sce', '
             waypoints.push(marker);
         }
 
+        var directionsDisplay = new google.maps.DirectionsRenderer({
+            suppressMarkers: true
+        });
+        var directionsService = new google.maps.DirectionsService();
 
+        $scope.visualizar = function () {
+
+            if (origem != null || destino != null) {
+
+                var waypointsPos = [];
+
+                waypoints.forEach(function (obj) {
+                    waypointsPos.push({
+                        location: obj.position,
+                        stopover: true
+                    })
+
+                });
+
+                var request = {
+                    origin: origem.position,
+                    destination: destino.position,
+                    travelMode: google.maps.DirectionsTravelMode.DRIVING,
+                    waypoints: waypointsPos
+
+                };
+
+                directionsService.route(request, function (response, status) {
+                    if (status === google.maps.DirectionsStatus.OK) {
+                        directionsDisplay.setMap(null);
+                        directionsDisplay.setDirections(response);
+                        directionsDisplay.setMap($scope.map.control.getGMap());
+                        // directionsDisplay.setPanel(document.getElementById('directionsList'));
+                        // $scope.directions.showList = true;
+                    }
+                })
+            } else {
+                alert("Dados inconsistentes!");
+                toastr.warning('Dados inconsistentes.', 'Alerta');
+            }
+        }
+
+        $scope.salvar = function () {
+            if ($scope.onibus == undefined || $scope.onibus == null || $scope.onibus.itinerario == undefined || $scope.onibus.itinerario == null) {
+                console.log("nao é possivel salvar o trajeto");
+            } else {
+
+                var waypointsPos = [];
+
+                waypoints.forEach(function (obj) {
+                    waypointsPos.push({
+                        location: obj.position,
+                        stopover: true
+                    })
+
+                });
+
+                $scope.onibus.itinerarios.forEach(function (itinerario) {
+                    if (itinerario.sentido == $scope.onibus.itinerario.sentido) {
+                        console.log(itinerario.sentido);
+                        itinerario.origem = origem.position;
+                        itinerario.destino = destino.position;
+                        itinerario.waypoints = waypointsPos;
+                    }
+                })
+
+                console.log($scope.onibus);
+
+                OnibusService.update($scope.onibus).then(function (result) {
+                    console.log(result);
+                }, function (error) {
+                    console.log(error);
+                })
+            }
+        }
     }
 ]);

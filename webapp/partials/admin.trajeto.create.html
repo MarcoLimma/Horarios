@@ -10,7 +10,7 @@
       <div class="form-group">
         <label for="origin" class="col-sm-2 control-label">Onibus</label>
         <div class="col-sm-8">
-          <select type="text" id="onibus" class="form-control text-input-stroke" ng-model="pesquisa.onibus" ng-options="o as (o.numero + ' - ' + o.nome) for o in listaOnibus">
+          <select type="text" id="onibus" class="form-control text-input-stroke" ng-model="onibus" ng-options="o as (o.numero + ' - ' + o.nome) for o in listaOnibus">
                 <option value="">---Selecione---</option> <!-- not selected / blank option -->
           </select>
         </div>
@@ -18,7 +18,7 @@
       <div class="form-group">
         <label for="destination" class="col-sm-2 control-label">Sentido</label>
         <div class="col-sm-4">
-          <select type="text" id="sentido" class="form-control text-input-stroke" ng-model="pesquisa.itinerario" ng-options="i as i.sentido for i in pesquisa.onibus.itinerarios">
+          <select type="text" id="sentido" class="form-control text-input-stroke" ng-model="onibus.itinerario" ng-options="i as i.sentido for i in onibus.itinerarios">
                 <option value="">---Selecione---</option> <!-- not selected / blank option -->
           </select>
         </div>
@@ -33,7 +33,8 @@
       </div>
       <div class="form-group">
         <div class="col-sm-offset-2 col-sm-8">
-          <button class="btn btn-primary" ng-click="getDirections(pesquisa.onibus, pesquisa.itinerario.arrayPos, pesquisa.horario)">Consultar</button>
+          <button class="btn btn-primary" ng-click="salvar()">Salvar</button>
+          <button class="btn btn-primary" ng-click="visualizar()">Visualizar</button>
           <!--<button class="btn btn-primary" ng-click="clearMap()">Limpar</button>-->
         </div>
       </div>

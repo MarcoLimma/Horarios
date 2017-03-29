@@ -1,6 +1,6 @@
 'use strict';
 
-var app = angular.module('app', ['ngRoute', 'appControllers', 'appServices', 'appDirectives', 'toastr', 'uiGmapgoogle-maps']);
+var app = angular.module('app', ['ngRoute', 'appServices', 'appDirectives', 'toastr', 'uiGmapgoogle-maps']);
 
 app.config(['$locationProvider', '$routeProvider',
     function ($location, $routeProvider) {
@@ -18,8 +18,7 @@ app.config(['$locationProvider', '$routeProvider',
             controller: 'HorariosCtrl'
         }).
         when('/sobre', {
-            templateUrl: 'partials/sobre.html',
-            controller: 'HomeCtrl'
+            templateUrl: 'partials/sobre.html'
         }).
         when('/admin', {
             templateUrl: 'partials/admin.index.html',
@@ -98,8 +97,7 @@ app.config(['$locationProvider', '$routeProvider',
 
         $location.hashPrefix('');
     }
-]);
-
+])
 
 app.config(function ($httpProvider) {
     $httpProvider.interceptors.push('TokenInterceptor');

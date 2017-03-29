@@ -47,7 +47,6 @@ appServices.factory('TokenInterceptor', function ($q, $window, $location, Authen
     };
 });
 
-
 appServices.factory('UserService', function ($http) {
     return {
 
