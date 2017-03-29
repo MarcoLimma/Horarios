@@ -4,7 +4,7 @@
       <div class="form-group">
         <label for="origin" class="col-sm-2 control-label">Onibus</label>
         <div class="col-sm-8">
-          <select type="text" id="onibus" class="form-control text-input-stroke" ng-model="pesquisa.onibus" ng-options="o as o.nome for o in listaOnibus">
+          <select type="text" id="onibus" class="form-control text-input-stroke" ng-model="pesquisa.onibus" ng-options="o as (o.numero + ' - ' + o.nome) for o in listaOnibus">
                 <option value="">---Selecione---</option> <!-- not selected / blank option -->
           </select>
         </div>
@@ -18,7 +18,7 @@
         </div>
         <label for="destination" class="col-sm-2 control-label">Horário</label>
         <div class="col-sm-2">
-          <select type="text" id="horario" class="form-control text-input-stroke" ng-model="pesquisa.horario" ng-options="h as h for h in (pesquisa.onibus.itinerarios | filter:{sentido: pesquisa.itinerario.sentido})[0].horarios">
+          <select type="text" id="horario" class="form-control text-input-stroke" ng-model="pesquisa.horario" ng-options="h as (h.hora + ':' + h.minuto) for h in pesquisa.itinerario.horarios">
                 <option value="">---Selecione---</option> <!-- not selected / blank option -->
           </select>
         </div>
