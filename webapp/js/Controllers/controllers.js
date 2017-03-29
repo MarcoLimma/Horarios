@@ -1,15 +1,8 @@
 var appControllers = angular.module('appControllers', []);
 
-appControllers.controller('HomeCtrl', ['$scope', '$sce', '$window', 'AuthenticationService', 'toastr',
-    function HomeCtrl($scope, $sce, $window, AuthenticationService, toastr) {
-
-    }
-]);
-
-
 appControllers.controller('TrajetosCtrl', ['$scope', '$sce', '$window', 'AuthenticationService', "$http", "TrajetosService", "OnibusService",
     function TrajetosCtrl($scope, $sce, $window, AuthenticationService, $http, TrajetosService, OnibusService) {
-        
+
         // map object
         $scope.map = {
             control: {},
@@ -24,17 +17,50 @@ appControllers.controller('TrajetosCtrl', ['$scope', '$sce', '$window', 'Authent
             onibus: {},
         }
 
-        var waypoint1 = { posicao: new google.maps.LatLng(-22.5213024, -43.1964261), nWaypoint: 0 };
-        var waypoint2 = { posicao: new google.maps.LatLng(-22.5203633, -43.194905), nWaypoint: 0 };
-        var waypoint3 = { posicao: new google.maps.LatLng(-22.5198167, -43.1944257), nWaypoint: 0 };
-        var waypoint4 = { posicao: new google.maps.LatLng(-22.5188112, -43.1923724), nWaypoint: 0 };
-        var waypoint5 = { posicao: new google.maps.LatLng(-22.5187114, -43.1911338), nWaypoint: 0 };
-        var waypoint6 = { posicao: new google.maps.LatLng(-22.5207528, -43.1892247), nWaypoint: 0 };
-        var waypoint7 = { posicao: new google.maps.LatLng(-22.5201625, -43.1880277), nWaypoint: 0 };
-        var waypoint8 = { posicao: new google.maps.LatLng(-22.5182006, -43.1862408), nWaypoint: 0 };
-        var waypoint9 = { posicao: new google.maps.LatLng(-22.5161192, -43.1832617), nWaypoint: 0 };
-        var waypoint10 = { posicao: new google.maps.LatLng(-22.5149519, -43.1819607), nWaypoint: 0 };
-        var waypoint11 = { posicao: new google.maps.LatLng(-22.5115425, -43.1783607), nWaypoint: 0 };
+        var waypoint1 = {
+            posicao: new google.maps.LatLng(-22.5213024, -43.1964261),
+            nWaypoint: 0
+        };
+        var waypoint2 = {
+            posicao: new google.maps.LatLng(-22.5203633, -43.194905),
+            nWaypoint: 0
+        };
+        var waypoint3 = {
+            posicao: new google.maps.LatLng(-22.5198167, -43.1944257),
+            nWaypoint: 0
+        };
+        var waypoint4 = {
+            posicao: new google.maps.LatLng(-22.5188112, -43.1923724),
+            nWaypoint: 0
+        };
+        var waypoint5 = {
+            posicao: new google.maps.LatLng(-22.5187114, -43.1911338),
+            nWaypoint: 0
+        };
+        var waypoint6 = {
+            posicao: new google.maps.LatLng(-22.5207528, -43.1892247),
+            nWaypoint: 0
+        };
+        var waypoint7 = {
+            posicao: new google.maps.LatLng(-22.5201625, -43.1880277),
+            nWaypoint: 0
+        };
+        var waypoint8 = {
+            posicao: new google.maps.LatLng(-22.5182006, -43.1862408),
+            nWaypoint: 0
+        };
+        var waypoint9 = {
+            posicao: new google.maps.LatLng(-22.5161192, -43.1832617),
+            nWaypoint: 0
+        };
+        var waypoint10 = {
+            posicao: new google.maps.LatLng(-22.5149519, -43.1819607),
+            nWaypoint: 0
+        };
+        var waypoint11 = {
+            posicao: new google.maps.LatLng(-22.5115425, -43.1783607),
+            nWaypoint: 0
+        };
 
         var waypoints1 = [];
 
@@ -50,18 +76,54 @@ appControllers.controller('TrajetosCtrl', ['$scope', '$sce', '$window', 'Authent
         waypoints1.push(waypoint10);
         waypoints1.push(waypoint11);
 
-        var ponto1 = { posicao: new google.maps.LatLng(-22.5091909, -43.1710863), nWaypoint: 0 };
-        var ponto2 = { posicao: new google.maps.LatLng(-22.5113056, -43.1839881), nWaypoint: 1 };
-        var ponto3 = { posicao: new google.maps.LatLng(-22.5135607, -43.1848623), nWaypoint: 1 };
-        var ponto4 = { posicao: new google.maps.LatLng(-22.5145073, -43.1851897), nWaypoint: 1 };
-        var ponto5 = { posicao: new google.maps.LatLng(-22.5156184, -43.1882224), nWaypoint: 1 };
-        var ponto6 = { posicao: new google.maps.LatLng(-22.5159129, -43.1898518), nWaypoint: 1 };
-        var ponto7 = { posicao: new google.maps.LatLng(-22.5172315, -43.1913954), nWaypoint: 1 };
-        var ponto8 = { posicao: new google.maps.LatLng(-22.5185902, -43.1916981), nWaypoint: 1 };
-        var ponto9 = { posicao: new google.maps.LatLng(-22.5193402, -43.1937602), nWaypoint: 2 };
-        var ponto10 = { posicao: new google.maps.LatLng(-22.5203456, -43.1948893), nWaypoint: 2 };
-        var ponto11 = { posicao: new google.maps.LatLng(-22.5212551, -43.1963846), nWaypoint: 2 };
-        var ponto12 = { posicao: new google.maps.LatLng(-22.5230785, -43.1983754), nWaypoint: 2 };
+        var ponto1 = {
+            posicao: new google.maps.LatLng(-22.5091909, -43.1710863),
+            nWaypoint: 0
+        };
+        var ponto2 = {
+            posicao: new google.maps.LatLng(-22.5113056, -43.1839881),
+            nWaypoint: 1
+        };
+        var ponto3 = {
+            posicao: new google.maps.LatLng(-22.5135607, -43.1848623),
+            nWaypoint: 1
+        };
+        var ponto4 = {
+            posicao: new google.maps.LatLng(-22.5145073, -43.1851897),
+            nWaypoint: 1
+        };
+        var ponto5 = {
+            posicao: new google.maps.LatLng(-22.5156184, -43.1882224),
+            nWaypoint: 1
+        };
+        var ponto6 = {
+            posicao: new google.maps.LatLng(-22.5159129, -43.1898518),
+            nWaypoint: 1
+        };
+        var ponto7 = {
+            posicao: new google.maps.LatLng(-22.5172315, -43.1913954),
+            nWaypoint: 1
+        };
+        var ponto8 = {
+            posicao: new google.maps.LatLng(-22.5185902, -43.1916981),
+            nWaypoint: 1
+        };
+        var ponto9 = {
+            posicao: new google.maps.LatLng(-22.5193402, -43.1937602),
+            nWaypoint: 2
+        };
+        var ponto10 = {
+            posicao: new google.maps.LatLng(-22.5203456, -43.1948893),
+            nWaypoint: 2
+        };
+        var ponto11 = {
+            posicao: new google.maps.LatLng(-22.5212551, -43.1963846),
+            nWaypoint: 2
+        };
+        var ponto12 = {
+            posicao: new google.maps.LatLng(-22.5230785, -43.1983754),
+            nWaypoint: 2
+        };
 
         var pontos1 = [];
 
@@ -83,17 +145,14 @@ appControllers.controller('TrajetosCtrl', ['$scope', '$sce', '$window', 'Authent
         //db
         var onibus = {
             nome: "211 - Valparaiso",
-            itinerarios: [
-                {
+            itinerarios: [{
                     sentido: "Centro",
                     arrayPos: 0,
-                    origem:
-                    {
+                    origem: {
                         latitude: -22.5233068,
                         longitude: -43.1987031
                     },
-                    destino:
-                    {
+                    destino: {
                         latitude: -22.50889,
                         longitude: -43.1723091
                     },
@@ -124,18 +183,15 @@ appControllers.controller('TrajetosCtrl', ['$scope', '$sce', '$window', 'Authent
                 {
                     sentido: "Bairro",
                     arrayPos: 1,
-                    origem:
-                    {
+                    origem: {
                         latitude: -22.50889,
                         longitude: -43.1723091
                     },
-                    destino:
-                    {
+                    destino: {
                         latitude: -22.5233068,
                         longitude: -43.1987031
                     },
-                    waypoints: [
-                        {
+                    waypoints: [{
                             location: "-22.5103355,-43.1762725",
                         },
                         {
@@ -170,21 +226,21 @@ appControllers.controller('TrajetosCtrl', ['$scope', '$sce', '$window', 'Authent
         }
 
         OnibusService.list().then(function (result) {
-                console.log(result.data);
-            
-                result.data.forEach(function (object) {
-                    var novoOnibus = {};
+            console.log(result.data);
 
-                    novoOnibus.nome = object.numero + " - " + object.nome;
-                    novoOnibus.itinerarios = onibus.itinerarios;
+            result.data.forEach(function (object) {
+                var novoOnibus = {};
 
-                    $scope.listaOnibus.push(novoOnibus);
+                novoOnibus.nome = object.numero + " - " + object.nome;
+                novoOnibus.itinerarios = onibus.itinerarios;
 
-                })
+                $scope.listaOnibus.push(novoOnibus);
 
-            }, function (error) {
+            })
 
-                console.log(error);
+        }, function (error) {
+
+            console.log(error);
         });
 
         // instantiate google map objects for directions
@@ -249,16 +305,16 @@ appControllers.controller('TrajetosCtrl', ['$scope', '$sce', '$window', 'Authent
                     var totalValues = $scope.calcTotalValues(response);
                     totalValues.nPontos = onibus.itinerarios[sentido].pontos.length;
 
-                    $scope.calcTotalDuration(totalValues, function(realTotalDuration){
+                    $scope.calcTotalDuration(totalValues, function (realTotalDuration) {
                         hora = hora + ":00";
                         console.log(hora);
-                        var time = hora.split(':');  
+                        var time = hora.split(':');
 
                         var d = new Date(); // creates a Date Object using the clients current time
 
-                        d.setHours  (+time[0]); // set Time accordingly, using implicit type coercion
-                        d.setMinutes( time[1]); // you can pass Number or String, it doesn't matter
-                        d.setSeconds( time[2]);
+                        d.setHours(+time[0]); // set Time accordingly, using implicit type coercion
+                        d.setMinutes(time[1]); // you can pass Number or String, it doesn't matter
+                        d.setSeconds(time[2]);
 
                         totalValues.selectedHour = d;
                         totalValues.realTotalDuration = realTotalDuration;
@@ -333,15 +389,15 @@ appControllers.controller('TrajetosCtrl', ['$scope', '$sce', '$window', 'Authent
                         element.close();
                     });
 
-                    var tempo = parseFloat((totalValues.realTotalDuration*parseFloat(distancia).toFixed(3))/totalValues.distance).toFixed(0);
+                    var tempo = parseFloat((totalValues.realTotalDuration * parseFloat(distancia).toFixed(3)) / totalValues.distance).toFixed(0);
 
-                     console.log(tempo);
+                    console.log(tempo);
 
-                    var horaEstimada =  new Date(totalValues.selectedHour.getTime() + tempo*60000);
+                    var horaEstimada = new Date(totalValues.selectedHour.getTime() + tempo * 60000);
 
                     console.log(totalValues.selectedHour);
 
-                    var horaEstimadaString = ((horaEstimada.getHours()<10?'0':'') + horaEstimada.getHours()) + ":" + ((horaEstimada.getMinutes()<10?'0':'') + horaEstimada.getMinutes())
+                    var horaEstimadaString = ((horaEstimada.getHours() < 10 ? '0' : '') + horaEstimada.getHours()) + ":" + ((horaEstimada.getMinutes() < 10 ? '0' : '') + horaEstimada.getMinutes())
 
                     contentString =
                         // '<div style="width: 120px; height: 72px; padding-left: 25px" id="content">' +
@@ -378,8 +434,7 @@ appControllers.controller('TrajetosCtrl', ['$scope', '$sce', '$window', 'Authent
                 for (var i = 0; i < nWaypoint; i++) {
                     if (i > 0) {
                         stringWaypoint += "|" + waypoints[i].location;
-                    }
-                    else {
+                    } else {
                         stringWaypoint = waypoints[i].location;
                     }
                 };
@@ -405,8 +460,7 @@ appControllers.controller('TrajetosCtrl', ['$scope', '$sce', '$window', 'Authent
                 var distancia = 0;
                 result.data.routes[0].legs.forEach(function (element) {
                     distancia += element.distance.value / 1000;
-                }
-                );
+                });
                 console.log(distancia);
 
                 return callback(distancia);
@@ -488,8 +542,7 @@ appControllers.controller('AdminUserCtrl', ['$scope', '$location', '$window', 'U
                     toastr.error('Error! Status:' + error.status + ' - ' + error.statusText, 'Register error');
                     console.log(error);
                 });
-            }
-            else {
+            } else {
                 $location.path("/admin/login");
             }
         }
@@ -498,8 +551,7 @@ appControllers.controller('AdminUserCtrl', ['$scope', '$location', '$window', 'U
             if (AuthenticationService.isAuthenticated) {
                 toastr.warning('You already have a login.', 'Register alert');
                 $location.path("/admin");
-            }
-            else {
+            } else {
                 UserService.register(username, password, passwordConfirm).then(function (result) {
                     toastr.success('Congratulations ' + username + ', now you can login to access the admin area.', 'Register successful');
                     $location.path("/admin/login");
@@ -580,16 +632,15 @@ appControllers.controller('OnibusCreateCtrl', ['$scope', '$location', '$sce', '$
                     toastr.error('Error! Status:' + error.status + ' - ' + error.statusText, 'Erro ao inserir');
                     console.log(error);
                 });
-            }
-            else {
+            } else {
                 $location.path("/admin/login");
             }
         }
 
-        $scope.adicionarItinerario = function(){
+        $scope.adicionarItinerario = function () {
 
             var itinerario = {}
-            
+
             itinerario.sentido = $scope.sentido;
 
             itinerario.horarios = $scope.horarios;
@@ -607,11 +658,11 @@ appControllers.controller('OnibusCreateCtrl', ['$scope', '$location', '$sce', '$
             $scope.minuto = undefined;
         }
 
-        $scope.adicionarHorario =  function(horarios, hora, minuto){
+        $scope.adicionarHorario = function (horarios, hora, minuto) {
 
             var horario = {
-                hora : hora,
-                minuto : minuto
+                hora: hora,
+                minuto: minuto
             }
 
             horarios.push(horario);
@@ -619,14 +670,14 @@ appControllers.controller('OnibusCreateCtrl', ['$scope', '$location', '$sce', '$
             console.log(horarios);
         }
 
-        $scope.deleteHorario = function(horarios, index){
+        $scope.deleteHorario = function (horarios, index) {
             toastr.success('Horario deletado com sucesso!', 'Exclusão');
             horarios.splice(index, 1);
         }
 
-         $scope.deleteItinerario = function(index){
+        $scope.deleteItinerario = function (index) {
             toastr.success('Itinerário deletado com sucesso!', 'Exclusão');
-             $scope.itinerarios.splice(index, 1);
+            $scope.itinerarios.splice(index, 1);
         }
     }
 ]);
@@ -646,10 +697,10 @@ appControllers.controller('OnibusEditCtrl', ['$scope', '$routeParams', '$locatio
         });
 
         $scope.save = function save(onibus) {
-            if (onibus !== undefined
-                && onibus.numero !== undefined && onibus.numero != ""
-                && onibus.nome !== undefined && onibus.nome != ""
-                && onibus.bairro !== undefined && onibus.bairro != "") {
+            if (onibus !== undefined &&
+                onibus.numero !== undefined && onibus.numero != "" &&
+                onibus.nome !== undefined && onibus.nome != "" &&
+                onibus.bairro !== undefined && onibus.bairro != "") {
 
 
                 OnibusService.update(onibus).then(function (result) {
@@ -661,5 +712,168 @@ appControllers.controller('OnibusEditCtrl', ['$scope', '$routeParams', '$locatio
                 });
             }
         }
+    }
+]);
+
+appControllers.controller('TrajetoListCtrl', ['$scope', '$location', '$sce', '$window', 'AuthenticationService', 'toastr', 'OnibusService',
+    function OnibusCtrl($scope, $location, $sce, $window, AuthenticationService, toastr, OnibusService) {
+
+        $scope.frota = [];
+
+        $scope.list = function () {
+
+            OnibusService.list().then(function (result) {
+
+                console.log(result);
+
+                $scope.frota = result.data;
+
+            }, function (error) {
+
+                console.log(error);
+            });
+        }
+
+        $scope.deleteOnibus = function deleteOnibus(id) {
+            if (id != undefined) {
+                OnibusService.delete(id).then(function (result) {
+                    console.log(result);
+                    toastr.success('Ônibus deletado com sucesso!', 'Exclusão');
+                    var frota = $scope.frota;
+                    for (var onibusKey in frota) {
+                        if (frota[onibusKey]._id == id) {
+                            $scope.frota.splice(onibusKey, 1);
+                            break;
+                        }
+                    }
+
+                }, function (error) {
+                    toastr.error('Erro! Status:' + error.status + ' - ' + error.statusText, 'Erro ao excluir');
+                    console.log(error);
+                });
+            }
+        }
+    }
+]);
+
+appControllers.controller('TrajetoCreateCtrl', ['$scope', '$location', '$sce', '$window', 'AuthenticationService', 'toastr', 'OnibusService',
+    function OnibusCtrl($scope, $location, $sce, $window, AuthenticationService, toastr, OnibusService) {
+
+        $scope.map = {
+            control: {},
+            center: {
+                latitude: -22.5114113,
+                longitude: -43.1827431
+            },
+            zoom: 15
+        };
+
+        $scope.listaOnibus = [];
+
+        OnibusService.list().then(function (result) {
+            console.log(result.data);
+
+            $scope.listaOnibus = result.data;
+
+            $scope.init();
+
+        }, function (error) {
+
+            console.log(error);
+        });
+
+        var waypoints = [];
+
+
+        $scope.init = function () {
+
+            var map = $scope.map.control.getGMap();
+            console.log(map);
+
+
+
+            //This event listener calls addMarker() when the map is clicked.
+            google.maps.event.addListener(map, 'click', function (event) {
+                console.log(event.latLng.lat() + ", " + event.latLng.lng() + " - " + $scope.marcador);
+
+                if ($scope.marcador == 1) {
+                    addMarkerOrigem(event.latLng, map);
+                }
+                if ($scope.marcador == 2) {
+                    addMarkerDestino(event.latLng, map);
+                }
+                if ($scope.marcador == 3) {
+                    if (waypoints.length >= 7) {
+                        alert("O número máximo de waypoints é 7");
+                    } else {
+                        addMarkerWaypoints(event.latLng, map);
+                    }
+
+
+                }
+                if ($scope.marcador == undefined) {
+                    alert("Selecione um tipo de marcador.");
+                }
+
+                waypoints.forEach(function (obj) {
+                    console.log(obj);
+                    obj.addListener('rightclick', function (event) {
+                        console.log("Clicado: " + event.latLng.lat() + ", " + event.latLng.lng());
+
+                        for (var waypointsKey in waypoints) {
+                            if (waypoints[waypointsKey].getPosition() == event.latLng) {
+                                waypoints[waypointsKey].setMap(null);
+                                waypoints.splice(waypointsKey, 1);
+                                break;
+                            }
+                        }
+                    });
+                });
+
+            });
+
+
+        }
+
+        function addMarkerOrigem(location, map) {
+            // Add the marker at the clicked location, and add the next-available label
+            // from the array of alphabetical characters.
+            var marker = new google.maps.Marker({
+                position: location,
+                label: 'I',
+                map: map
+            });
+        }
+
+        function addMarkerDestino(location, map) {
+            // Add the marker at the clicked location, and add the next-available label
+            // from the array of alphabetical characters.
+            var marker = new google.maps.Marker({
+                position: location,
+                label: 'F',
+                map: map
+            });
+        }
+        // Adds a marker to the map.
+        function addMarkerWaypoints(location, map) {
+            var startPinColor = "66ff33";
+            var pinImage = new google.maps.MarkerImage("http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|" + startPinColor,
+                new google.maps.Size(21, 34),
+                new google.maps.Point(0, 0),
+                new google.maps.Point(10, 34));
+
+
+            // Add the marker at the clicked location, and add the next-available label
+            // from the array of alphabetical characters.
+            var marker = new google.maps.Marker({
+                position: location,
+                map: map,
+                label: (waypoints.length + 1).toString(),
+            });
+
+            waypoints.push(marker);
+        }
+
+
     }
 ]);

@@ -1,94 +1,47 @@
 <section class="onibus">
     <ol class="breadcrumb">
-        <li><a href="#/admin/onibus">ônibus</a></li>
-        <li class="active">Inserir ônibus</li>
+        <li><a href="#/admin/trajeto">Trajeto</a></li>
+        <li class="active">Inserir trajeto</li>
     </ol>
 
-    <form name="CreateOnibustForm">
-        <div class="form-group">
-            <label for="inputTitle">Numero</label>
-            <input type="number" class="form-control text-input-stroke" id="inputTitle" placeholder="Numero" ng-model="onibus.numero">
+   <div class="panel panel-default">
+  <div class="panel-body">
+    <form class="form-horizontal" role="form">
+      <div class="form-group">
+        <label for="origin" class="col-sm-2 control-label">Onibus</label>
+        <div class="col-sm-8">
+          <select type="text" id="onibus" class="form-control text-input-stroke" ng-model="pesquisa.onibus" ng-options="o as (o.numero + ' - ' + o.nome) for o in listaOnibus">
+                <option value="">---Selecione---</option> <!-- not selected / blank option -->
+          </select>
         </div>
-       <div class="form-group">
-            <label for="inputTitle">Nome</label>
-            <input type="text" class="form-control text-input-stroke" id="inputTitle" placeholder="Nome" ng-model="onibus.nome">
+      </div>
+      <div class="form-group">
+        <label for="destination" class="col-sm-2 control-label">Sentido</label>
+        <div class="col-sm-4">
+          <select type="text" id="sentido" class="form-control text-input-stroke" ng-model="pesquisa.itinerario" ng-options="i as i.sentido for i in pesquisa.onibus.itinerarios">
+                <option value="">---Selecione---</option> <!-- not selected / blank option -->
+          </select>
         </div>
-        <div class="form-group">
-            <label for="inputTitle">Bairro</label>
-            <input type="text" class="form-control text-input-stroke" id="inputTitle" placeholder="Bairro" ng-model="onibus.bairro">
+      </div>
+      <div class="form-group">
+        <label for="marcador" class="col-sm-2 control-label">Marcador</label>
+        <div class="col-sm-4">
+            <input type="radio" value="1" ng-model="marcador"> Origem <br>
+            <input type="radio" value="2" ng-model="marcador"> Destino <br>
+            <input type="radio" value="3" ng-model="marcador"> Waypoints <br>
         </div>
-         <div class="form-group">
-            <label for="inputTitle">Itinerários</label>
+      </div>
+      <div class="form-group">
+        <div class="col-sm-offset-2 col-sm-8">
+          <button class="btn btn-primary" ng-click="getDirections(pesquisa.onibus, pesquisa.itinerario.arrayPos, pesquisa.horario)">Consultar</button>
+          <!--<button class="btn btn-primary" ng-click="clearMap()">Limpar</button>-->
         </div>
-        <div class="col-sm-12 well">
-            <div class="form-group">
-                <input type="button" value="Adicionar" class="btn btn-success" ng-click="adicionarItinerario(itinerario)"><br>
-                <label for="inputBairro">Sentido</label>
-                <input type="text" class="form-control text-input-stroke" placeholder="Sentido" id="inputBairro" ng-model="sentido">
-            </div>
-            <div class="form-group">
-                <label for="inputTitle">Horas de saída</label>
-                <br>
-                <input class="col-md-1 text-input-stroke" type="number" max="23" min="0" ng-model="hora">  
-                <input class="col-md-1 text-input-stroke" type="number" max="59" min="0" ng-model="minuto"> 
-                <input type="button" value="Add" ng-click="adicionarHorario(horarios, hora, minuto)">
-            <table class="table table-condensed table-hover">
-                <thead>
-                    <tr>
-                        <th>Horário</th>
-                        <th>Ação</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr ng-repeat="horario in horarios">
-                        <td>
-                            <input class="col-md-2 text-input-stroke" type="number" max="23" min="0" ng-model="horario.hora">  
-                            <input class="col-md-2 text-input-stroke" type="number" max="59" min="0" ng-model="horario.minuto"> </td>
-                        <td>
-                            <!--<a href="#/admin/onibus/edit/{{onibus._id}}" class="btn btn-warning btn-xs"><span class="glyphicon glyphicon-edit"></span></a>-->
-                            <button class="btn btn-danger btn-xs" ng-click="deleteHorario(horarios, $index)"><span class="glyphicon glyphicon-trash"></span></button>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-            </div>
-        </div>
-        
-        <div class="col-sm-12 well" ng-repeat="i in itinerarios">
-            <div class="form-group">
-                <label for="inputBairro">Sentido</label> <input type="button" class="btn btn-danger pull-right btn-xs" value="X" ng-click="deleteItinerario($index)">
-                <input type="text" class="form-control text-input-stroke" id="inputBairro" placeholder="Sentido" ng-model="i.sentido">
-            </div>
-            <div class="form-group">
-                <label for="inputTitle">Horas de saída</label>
-                <br>
-                <input class="col-md-1 text-input-stroke" type="number" max="23" min="0" ng-model="hora_$index">  
-                <input class="col-md-1 text-input-stroke" type="number" max="59" min="0" ng-model="minuto_$index"> 
-                <input type="button" value="Add" ng-click="adicionarHorario(i.horarios, hora_$index, minuto_$index)">
-                {{hora_$index}}
-            <table class="table table-condensed table-hover">
-                <thead>
-                    <tr>
-                        <th>Horário</th>
-                        <th>Ação</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr ng-repeat="horario in i.horarios">
-                        <td>
-                            <input class="col-md-2 text-input-stroke" type="number" max="23" min="0" ng-model="horario.hora">  
-                            <input class="col-md-2 text-input-stroke" type="number" max="59" min="0" ng-model="horario.minuto"> </td>
-                        <td>
-                            <!--<a href="#/admin/onibus/edit/{{onibus._id}}" class="btn btn-warning btn-xs"><span class="glyphicon glyphicon-edit"></span></a>-->
-                            <button class="btn btn-danger btn-xs" ng-click="deleteHorario(i.horarios, $index)"><span class="glyphicon glyphicon-trash"></span></button>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-            </div>
-        </div>
-
-        <button type="submit" class="btn btn-success" ng-click="create(onibus)">Inserir</button>
+      </div>
     </form>
+    <ui-gmap-google-map center="map.center" zoom="map.zoom" control="map.control">
+    </ui-gmap-google-map>
+    <!--<div id="directionsList" ng-show="directions.showList" class="panel panel-primary"></div>-->
+  </div>
+</div>
 
 </section>
