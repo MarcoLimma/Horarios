@@ -547,6 +547,11 @@ angular.module('app').controller('TrajetoCreateCtrl', ['$scope', '$location', '$
         var destino = null;
         var waypoints = [];
 
+        var directionsDisplay = new google.maps.DirectionsRenderer({
+            suppressMarkers: true
+        });
+        var directionsService = new google.maps.DirectionsService();
+
 
         $scope.initMap = function () {
 
@@ -567,7 +572,8 @@ angular.module('app').controller('TrajetoCreateCtrl', ['$scope', '$location', '$
                         alert("O número máximo de waypoints é 7");
                         toastr.warning('O número máximo de waypoints é 7.', 'Alerta');
                     } else {
-                        addMarkerWaypoints(event.latLng, map);
+                        var wpt = addMarkerWaypoints(event.latLng, map, waypoints.length + 1);
+                        waypoints.push(wpt);
                     }
                 }
                 if ($scope.marcador == undefined) {
@@ -595,14 +601,14 @@ angular.module('app').controller('TrajetoCreateCtrl', ['$scope', '$location', '$
                 origem.setMap(null);
                 var marker = new google.maps.Marker({
                     position: location,
-                    label: 'O',
+                    label: 'Org',
                     map: map
                 });
                 origem = marker;
             } else {
                 var marker = new google.maps.Marker({
                     position: location,
-                    label: 'O',
+                    label: 'Org',
                     map: map
                 });
                 origem = marker;
@@ -614,21 +620,21 @@ angular.module('app').controller('TrajetoCreateCtrl', ['$scope', '$location', '$
                 destino.setMap(null);
                 var marker = new google.maps.Marker({
                     position: location,
-                    label: 'D',
+                    label: 'Dst',
                     map: map
                 });
                 destino = marker;
             } else {
                 var marker = new google.maps.Marker({
                     position: location,
-                    label: 'D',
+                    label: 'Dst',
                     map: map
                 });
                 destino = marker;
             }
         }
 
-        function addMarkerWaypoints(location, map) {
+        function addMarkerWaypoints(location, map, label) {
             var startPinColor = "66ff33";
             var pinImage = new google.maps.MarkerImage("http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|" + startPinColor,
                 new google.maps.Size(21, 34),
@@ -638,83 +644,71 @@ angular.module('app').controller('TrajetoCreateCtrl', ['$scope', '$location', '$
             var marker = new google.maps.Marker({
                 position: location,
                 map: map,
-                label: (waypoints.length + 1).toString(),
+                label: label.toString(),
             });
-
-            waypoints.push(marker);
+            return marker;
         }
-
-        var directionsDisplay = new google.maps.DirectionsRenderer({
-            suppressMarkers: true
-        });
-        var directionsService = new google.maps.DirectionsService();
 
         $scope.visualizar = function () {
 
-            console.log(onibus.itinerario);
+        
+
+            var fromdb = false;
 
             if ($scope.onibus.itinerario != undefined && $scope.onibus.itinerario != null) {
-                var itinerario = $scope.onibus.itinerario;     
-                if(itinerario.origem != null && itinerario.destino != null)
-                {
-                    var marker = new google.maps.Marker({
-                    position: location,
-                    label: 'O',
-                    map: map
+                fromdb = true;
+                origem = new google.maps.Marker({
+                    position: $scope.onibus.itinerario.origem,
+                    label: 'Org',
+                    map: $scope.map.control.getGMap()
                 });
-                var request = {
-                        origin: $scope.onibus.itinerario.origem.position,
-                        destination: $scope.onibus.itinerario.destino.position,
-                        travelMode: google.maps.DirectionsTravelMode.DRIVING,
-                        waypoints: $scope.onibus.itinerario.waypointsPos
+                destino = new google.maps.Marker({
+                    position: $scope.onibus.itinerario.destino,
+                    label: 'Dst',
+                    map: $scope.map.control.getGMap()
+                });
+                waypoints = $scope.onibus.itinerario.waypoints;
+            }
 
-                    };
+            if (origem != null && destino != null) {
 
-                    directionsService.route(request, function (response, status) {
-                        if (status === google.maps.DirectionsStatus.OK) {
-                            directionsDisplay.setMap(null);
-                            directionsDisplay.setDirections(response);
-                            directionsDisplay.setMap($scope.map.control.getGMap());
-                            // directionsDisplay.setPanel(document.getElementById('directionsList'));
-                            // $scope.directions.showList = true;
-                        }
-                    })
-                }
-                
-            } else {
-                if (origem != null && destino != null) {
+                var waypointsPos = [];
 
-                    var waypointsPos = [];
-
+                if (!fromdb) {
                     waypoints.forEach(function (obj) {
                         waypointsPos.push({
                             location: obj.position,
                             stopover: true
                         })
-
                     });
-
-                    var request = {
-                        origin: origem.position,
-                        destination: destino.position,
-                        travelMode: google.maps.DirectionsTravelMode.DRIVING,
-                        waypoints: waypointsPos
-
-                    };
-
-                    directionsService.route(request, function (response, status) {
-                        if (status === google.maps.DirectionsStatus.OK) {
-                            directionsDisplay.setMap(null);
-                            directionsDisplay.setDirections(response);
-                            directionsDisplay.setMap($scope.map.control.getGMap());
-                            // directionsDisplay.setPanel(document.getElementById('directionsList'));
-                            // $scope.directions.showList = true;
-                        }
-                    })
                 } else {
-                    alert("Dados inconsistentes!");
-                    toastr.warning('Dados inconsistentes.', 'Alerta');
+                    waypointsPos = $scope.onibus.itinerario.waypoints;
+
+                    waypointsPos.forEach(function(element, index){
+                        addMarkerWaypoints(element.location,$scope.map.control.getGMap(), index);
+                    });
                 }
+
+                var request = {
+                    origin: origem.position,
+                    destination: destino.position,
+                    travelMode: google.maps.DirectionsTravelMode.DRIVING,
+                    waypoints: waypointsPos
+
+                };
+
+                directionsService.route(request, function (response, status) {
+                    if (status === google.maps.DirectionsStatus.OK) {
+                        directionsDisplay.setMap(null);
+                        directionsDisplay.setDirections(response);
+                        directionsDisplay.setMap($scope.map.control.getGMap());
+                        // directionsDisplay.setPanel(document.getElementById('directionsList'));
+                        // $scope.directions.showList = true;
+                    }
+                })
+            } else {
+                alert("Dados inconsistentes!");
+                toastr.warning('Dados inconsistentes.', 'Alerta');
             }
         }
 
@@ -750,6 +744,15 @@ angular.module('app').controller('TrajetoCreateCtrl', ['$scope', '$location', '$
                     console.log(error);
                 })
             }
+        }
+
+        $scope.clearMap = function () {
+            origem.setMap(null);
+            destino.setMap(null);
+            waypoints.forEach(function (element) {
+                element.setMap(null);
+            })
+            directionsDisplay.setMap(null);
         }
     }
 ]);

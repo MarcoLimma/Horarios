@@ -124,6 +124,7 @@ angular.module('app').controller('OnibusEditCtrl', ['$scope', '$routeParams', '$
         var id = $routeParams.id;
 
         OnibusService.read(id).then(function (result) {
+            console.log(result);
             $scope.onibus = result.data;
         }, function (error) {
             toastr.error('Não foi possivel carragar as informações.', 'Erro ao editar');
@@ -145,6 +146,28 @@ angular.module('app').controller('OnibusEditCtrl', ['$scope', '$routeParams', '$
                     console.log(error);
                 });
             }
+        }
+
+        $scope.adicionarHorario = function (horarios, hora, minuto) {
+
+            var horario = {
+                hora: hora,
+                minuto: minuto
+            }
+
+            horarios.push(horario);
+
+            console.log(horarios);
+        }
+
+        $scope.deleteHorario = function (horarios, index) {
+            toastr.success('Horario deletado com sucesso!', 'Exclusão');
+            horarios.splice(index, 1);
+        }
+
+        $scope.deleteItinerario = function (itinerarios, index) {
+            toastr.success('Itinerário deletado com sucesso!', 'Exclusão');
+            itinerarios.splice(index, 1);
         }
     }
 ]);

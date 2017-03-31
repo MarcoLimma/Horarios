@@ -18,7 +18,6 @@
       <div class="form-group">
         <label for="destination" class="col-sm-2 control-label">Sentido</label>
         <div class="col-sm-4">
-          {{onibus.itinerario}}
           <select type="text" id="sentido" class="form-control text-input-stroke" ng-model="onibus.itinerario" ng-options="i as i.sentido for i in onibus.itinerarios">
                 <option value="">---Selecione---</option> <!-- not selected / blank option -->
           </select>
@@ -36,6 +35,7 @@
         <div class="col-sm-offset-2 col-sm-8">
           <button class="btn btn-primary" ng-click="salvar()">Salvar</button>
           <button class="btn btn-primary" ng-click="visualizar()">Visualizar</button>
+          <button class="btn btn-primary pull-right" ng-click="clearMap()">Limpar</button>
           <!--<button class="btn btn-primary" ng-click="clearMap()">Limpar</button>-->
         </div>
       </div>
