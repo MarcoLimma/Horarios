@@ -1,0 +1,15 @@
+<section class="onibus" ng-init="carregarPontos()">
+    <ol class="breadcrumb">
+        <li><a href="#/admin">Admin</a></li>
+        <li class="active">Pronto</li>
+    </ol>
+
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <ui-gmap-google-map center="map.center" zoom="map.zoom" control="map.control">
+            </ui-gmap-google-map>
+            <button class="btn btn-primary" ng-click="salvar()">Salvar</button>
+            <!--<div id="directionsList" ng-show="directions.showList" class="panel panel-primary"></div>-->
+        </div>
+    </div>
+</section>

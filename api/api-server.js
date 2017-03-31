@@ -22,6 +22,7 @@ var routes = {};
 routes.users = require('./route/users.js');
 routes.onibus = require('./route/onibus.js');
 routes.trajetos = require('./route/trajetos.js');
+routes.pontos = require('./route/pontos.js');
 
 //Endpoints 
 
@@ -58,5 +59,22 @@ app.delete('/onibus/:id', jwt({ secret: secret.secretToken }), routes.onibus.del
 
 //External Request
 app.get('/trajetos/externalRequest/:url', routes.trajetos.externalRequest);
+
+//Ponto Route
+
+//Show a ponto list
+app.get('/ponto/', routes.pontos.list);
+
+//Read a ponto
+app.get('/ponto/:id', routes.pontos.read);
+
+//Create a new ponto
+app.post('/ponto/save', jwt({ secret: secret.secretToken }), routes.pontos.save);
+
+//Update a ponto
+app.put('/ponto/', jwt({ secret: secret.secretToken }), routes.pontos.update);
+
+//Delete a ponto
+app.delete('/ponto/:id', jwt({ secret: secret.secretToken }), routes.pontos.delete);
 
 console.log('The API is starting on port ' + port);

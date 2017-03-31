@@ -85,8 +85,8 @@ app.config(['$locationProvider', '$routeProvider',
             }
         }).
         when('/admin/ponto', {
-            templateUrl: 'partials/admin.index.html',
-            controller: 'AdminCtrl',
+            templateUrl: 'partials/admin.ponto.html',
+            controller: 'PontoCtrl',
             access: {
                 requiredAuthentication: true
             }

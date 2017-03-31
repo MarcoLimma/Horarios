@@ -651,38 +651,70 @@ angular.module('app').controller('TrajetoCreateCtrl', ['$scope', '$location', '$
 
         $scope.visualizar = function () {
 
-            if (origem != null || destino != null) {
+            console.log(onibus.itinerario);
 
-                var waypointsPos = [];
-
-                waypoints.forEach(function (obj) {
-                    waypointsPos.push({
-                        location: obj.position,
-                        stopover: true
-                    })
-
+            if ($scope.onibus.itinerario != undefined && $scope.onibus.itinerario != null) {
+                var itinerario = $scope.onibus.itinerario;     
+                if(itinerario.origem != null && itinerario.destino != null)
+                {
+                    var marker = new google.maps.Marker({
+                    position: location,
+                    label: 'O',
+                    map: map
                 });
-
                 var request = {
-                    origin: origem.position,
-                    destination: destino.position,
-                    travelMode: google.maps.DirectionsTravelMode.DRIVING,
-                    waypoints: waypointsPos
+                        origin: $scope.onibus.itinerario.origem.position,
+                        destination: $scope.onibus.itinerario.destino.position,
+                        travelMode: google.maps.DirectionsTravelMode.DRIVING,
+                        waypoints: $scope.onibus.itinerario.waypointsPos
 
-                };
+                    };
 
-                directionsService.route(request, function (response, status) {
-                    if (status === google.maps.DirectionsStatus.OK) {
-                        directionsDisplay.setMap(null);
-                        directionsDisplay.setDirections(response);
-                        directionsDisplay.setMap($scope.map.control.getGMap());
-                        // directionsDisplay.setPanel(document.getElementById('directionsList'));
-                        // $scope.directions.showList = true;
-                    }
-                })
+                    directionsService.route(request, function (response, status) {
+                        if (status === google.maps.DirectionsStatus.OK) {
+                            directionsDisplay.setMap(null);
+                            directionsDisplay.setDirections(response);
+                            directionsDisplay.setMap($scope.map.control.getGMap());
+                            // directionsDisplay.setPanel(document.getElementById('directionsList'));
+                            // $scope.directions.showList = true;
+                        }
+                    })
+                }
+                
             } else {
-                alert("Dados inconsistentes!");
-                toastr.warning('Dados inconsistentes.', 'Alerta');
+                if (origem != null && destino != null) {
+
+                    var waypointsPos = [];
+
+                    waypoints.forEach(function (obj) {
+                        waypointsPos.push({
+                            location: obj.position,
+                            stopover: true
+                        })
+
+                    });
+
+                    var request = {
+                        origin: origem.position,
+                        destination: destino.position,
+                        travelMode: google.maps.DirectionsTravelMode.DRIVING,
+                        waypoints: waypointsPos
+
+                    };
+
+                    directionsService.route(request, function (response, status) {
+                        if (status === google.maps.DirectionsStatus.OK) {
+                            directionsDisplay.setMap(null);
+                            directionsDisplay.setDirections(response);
+                            directionsDisplay.setMap($scope.map.control.getGMap());
+                            // directionsDisplay.setPanel(document.getElementById('directionsList'));
+                            // $scope.directions.showList = true;
+                        }
+                    })
+                } else {
+                    alert("Dados inconsistentes!");
+                    toastr.warning('Dados inconsistentes.', 'Alerta');
+                }
             }
         }
 

@@ -105,3 +105,28 @@ appServices.factory('TrajetosService', function ($http) {
         }
     }
 });
+
+appServices.factory('PontoService', function ($http) {
+    return {
+
+        list: function () {
+            return $http.get('/ponto/');
+        },
+
+        read: function (id) {
+            return $http.get('/ponto/' + id);
+        },
+
+        save: function (pontosAdicionados, pontosRemovidos) {
+            return $http.post('/ponto/save', { pontosAdicionados: pontosAdicionados,  pontosRemovidos: pontosRemovidos });
+        },
+
+        update: function (onibus) {
+            return $http.put('/ponto/', { onibus: onibus });
+        },
+
+        delete: function (id) {
+            return $http.delete('/ponto/' + id);
+        }
+    }
+});

@@ -33,6 +33,13 @@ var Onibus = new Schema({
     created: { type: Date, default: Date.now }
 });
 
+// ônibus schema
+var Ponto = new Schema({
+    localizacao: { type: Object, required: true},
+    bairro: { type: String, required: false },
+    created: { type: Date, default: Date.now }
+});
+
 
 // Bcrypt middleware on UserSchema
 User.pre('save', function(next) {
@@ -63,8 +70,10 @@ User.methods.comparePassword = function(password, cb) {
 //Define Models
 var userModel = mongoose.model('User', User);
 var onibusModel = mongoose.model('Onibus', Onibus);
+var pontoModel = mongoose.model('Ponto', Ponto);
 
 
 // Export Models
 exports.userModel = userModel;
 exports.onibusModel = onibusModel;
+exports.pontoModel = pontoModel;

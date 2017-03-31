@@ -1,6 +1,6 @@
 var db = require('../config/mongo_database');
 
-var publicFields = '_id numero nome bairro created';
+var publicFields = '_id numero nome bairro itinerarios created';
 
 
 exports.create = function (req, res) {
